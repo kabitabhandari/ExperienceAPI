@@ -34,8 +34,11 @@ class EmployeeServiceTestWebclient {
     WebClient.RequestHeadersSpec requestHeadersSpecMock;
     @Mock
     WebClient.ResponseSpec responseSpecMock;
-    @Mock private WebclientConfig webClientconfig;
-    @Mock WebClient webClient;
+    @Mock
+    private WebclientConfig webClientconfig;
+    @Mock
+    WebClient webClient;
+
     @InjectMocks
     EmployeeService employeeService;
 

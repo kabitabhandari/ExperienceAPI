@@ -2,6 +2,8 @@ package com.kbi.experienceapi.service;
 
 import com.kbi.experienceapi.model.employeesworld.Employee;
 import com.kbi.experienceapi.model.employeesworld.EmployeeDesignation;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -18,7 +20,7 @@ public class ServiceWithConstructor {
     }
 
 
-    public List<EmployeeDesignation> getEmployees() {
+    public ResponseEntity<List<EmployeeDesignation>> getEmployees() {
 
         Employee[] employeeArray = webClientForEmployee
                 .get()
@@ -32,7 +34,7 @@ public class ServiceWithConstructor {
 
 
         // return employeeArray;
-        return someAttributesEmployee;
+        return ResponseEntity.status(HttpStatus.OK).body(someAttributesEmployee);
 
     }
 
