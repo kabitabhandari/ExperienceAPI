@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: employees-info
+
+server:
+  servlet:
+    context-path: /v1/base-path

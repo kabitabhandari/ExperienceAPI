@@ -1,47 +1,49 @@
 package com.kbi.experienceapi.service;
 
+import com.kbi.experienceapi.config.WebclientConfig;
 import com.kbi.experienceapi.model.employeesworld.Employee;
-import com.kbi.experienceapi.model.employeesworld.SomeAttributesEmployee;
+import com.kbi.experienceapi.model.employeesworld.EmployeeDesignation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
-    private final WebClient webClientForEmployee;
+    private final WebclientConfig webClientConfig;
 
-    public EmployeeService(WebClient.Builder builder) {
-        webClientForEmployee = builder.baseUrl("http://localhost:8081").build();
+    @Autowired
+    public EmployeeService(WebclientConfig webClientConfig) {
+        this.webClientConfig = webClientConfig;
     }
 
+    public ResponseEntity<List<EmployeeDesignation>> getEmployees() {
 
-    public List<SomeAttributesEmployee> getEmployees() {
-
-        Employee[] employeeArray = webClientForEmployee
+        Employee[] employeeArrayResponse = webClientConfig
+                .webClientForEmployee()
                 .get()
-                .uri("/employees")
+                .uri("/all-employees")
                 .retrieve()
                 .bodyToMono(Employee[].class)
                 .block();
 
 
-        List<SomeAttributesEmployee> someAttributesEmployee  = Arrays.stream(employeeArray).map(e -> pickingFewPropertiesFromEmployee(e)).collect(Collectors.toList());
+        List<EmployeeDesignation> ListOfEmployeeWithDesignation  = Arrays.stream(employeeArrayResponse).map(e -> onlyIncludeDesignation(e)).collect(Collectors.toList());
 
-
-       // return employeeArray;
-        return someAttributesEmployee;
+        return ResponseEntity.status(HttpStatus.OK).body(ListOfEmployeeWithDesignation);
+        //return new ResponseEntity<>(ListOfEmployeeWithDesignation, HttpStatus.CREATED); // or this way to return RE
 
     }
 
-    private SomeAttributesEmployee pickingFewPropertiesFromEmployee(Employee emp) {
-        SomeAttributesEmployee sae = new SomeAttributesEmployee();
-        sae.setEmployeeid(emp.getEmployeeid());
-        sae.setName(emp.getName());
-        sae.setJobtitle(emp.getJobtitle());
-        return sae;
+    private EmployeeDesignation onlyIncludeDesignation(Employee emp) {
+        EmployeeDesignation ed = new EmployeeDesignation();
+        ed.setEmployeeid(emp.getEmployeeid());
+        ed.setName(emp.getName());
+        ed.setJobtitle(emp.getJobtitle());
+        return ed;
     }
 }
