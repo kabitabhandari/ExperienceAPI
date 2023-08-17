@@ -3,6 +3,7 @@ package com.kbi.experienceapi.service;
 import com.kbi.experienceapi.model.employeesworld.Employee;
 import com.kbi.experienceapi.model.employeesworld.EmployeeDesignation;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -38,21 +39,21 @@ class EmpServiceWithBuiLderTest {
     EmpServiceWithBuiLder service;
 
     //You need to create stubs for WebClient.Builder before invoking the EmpServiceWithBuiLder constructor
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+        when(builder.baseUrl(anyString())).thenReturn(builder);
+        when(builder.build()).thenReturn(webClientForEmployee);
+        service = new EmpServiceWithBuiLder(builder.baseUrl(anyString()));
+
+    }
 
     @Test
     void getEmployeesShouldReturnList() {
-
-        //create stubs
-        when(builder.baseUrl(anyString())).thenReturn(builder);
-        when(builder.build()).thenReturn(webClientForEmployee);
-
         when(webClientForEmployee.get()).thenReturn(requestHeadersUriSpecMock);
         when(requestHeadersUriSpecMock.uri(anyString())).thenReturn(requestHeadersSpecMock);
         when(requestHeadersSpecMock.retrieve()).thenReturn(responseSpecMock);
         when(responseSpecMock.bodyToMono(Employee[].class)).thenReturn(Mono.just(employeeArrayResponseMock()));
-
-        service = new EmpServiceWithBuiLder(builder.baseUrl(anyString()));
-        MockitoAnnotations.openMocks(this);
 
         ResponseEntity<List<EmployeeDesignation>> actual = service.getEmployees();
         Assertions.assertEquals(HttpStatus.OK.is2xxSuccessful(), actual.getStatusCode().is2xxSuccessful());
