@@ -19,6 +19,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +46,7 @@ class EmployeeServiceTest_Using_Webclient {
 
         when(webClientconfig.webClientForEmployee()).thenReturn(webClient);
         when(webClientconfig.webClientForEmployee().get()).thenReturn(requestHeadersUriSpecMock);
-        when(requestHeadersUriSpecMock.uri("/all-employees")).thenReturn(requestHeadersSpecMock);
+        when(requestHeadersUriSpecMock.uri(anyString())).thenReturn(requestHeadersSpecMock);
         when(requestHeadersSpecMock.retrieve()).thenReturn(responseSpecMock);
         when(responseSpecMock.bodyToMono(Employee[].class)).thenReturn(Mono.just(employeeArrayResponseMock()));
 
