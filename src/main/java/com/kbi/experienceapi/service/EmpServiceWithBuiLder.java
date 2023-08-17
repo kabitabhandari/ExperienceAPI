@@ -4,27 +4,24 @@ import com.kbi.experienceapi.model.employeesworld.Employee;
 import com.kbi.experienceapi.model.employeesworld.EmployeeDesignation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-public class ServiceWithConstructor {
+public class EmpServiceWithBuiLder {
     private final WebClient webClientForEmployee;
 
-    public ServiceWithConstructor(WebClient.Builder builder) {
+    public EmpServiceWithBuiLder(WebClient.Builder builder) {
         webClientForEmployee = builder.baseUrl("http://localhost:8081").build();
     }
-
 
     public ResponseEntity<List<EmployeeDesignation>> getEmployees() {
 
         Employee[] employeeArray = webClientForEmployee
                 .get()
-                .uri("/employees")
+                .uri("/all-employees")
                 .retrieve()
                 .bodyToMono(Employee[].class)
                 .block();
