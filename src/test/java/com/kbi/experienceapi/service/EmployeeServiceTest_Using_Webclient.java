@@ -12,6 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClient.RequestHeadersSpec;
+import org.springframework.web.reactive.function.client.WebClient.RequestHeadersUriSpec;
+import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -19,23 +22,18 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeServiceTestWebclient {
-    /**
-     * We have two main options for mocking in our tests:
-     * <p>
-     * Approach 1 : Use Mockito to mimic the behavior of WebClient
-     * Approach 2 : Use WebClient for real, but mock the service it calls by using MockWebServer (okhttp)
-     */
-    //Approach 1 : Use Mockito to mimic the behavior of WebClient
+class EmployeeServiceTest_Using_Webclient {
+
+    // Mocking WebClient
 
     @Mock
-    WebClient.RequestHeadersUriSpec requestHeadersUriSpecMock;
+    RequestHeadersUriSpec requestHeadersUriSpecMock;
     @Mock
-    WebClient.RequestHeadersSpec requestHeadersSpecMock;
+    RequestHeadersSpec requestHeadersSpecMock;
     @Mock
-    WebClient.ResponseSpec responseSpecMock;
+    ResponseSpec responseSpecMock;
     @Mock
-    private WebclientConfig webClientconfig;
+    WebclientConfig webClientconfig;
     @Mock
     WebClient webClient;
 
