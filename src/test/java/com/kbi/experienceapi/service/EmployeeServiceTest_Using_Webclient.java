@@ -24,8 +24,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceTest_Using_Webclient {
-
-    // Mocking WebClient
+    @InjectMocks
+    EmployeeService employeeService;
 
     @Mock
     RequestHeadersUriSpec requestHeadersUriSpecMock;
@@ -38,19 +38,20 @@ class EmployeeServiceTest_Using_Webclient {
     @Mock
     WebClient webClient;
 
-    @InjectMocks
-    EmployeeService employeeService;
 
     @Test
     void getEmployeesShouldReturnList() {
 
+        //mocking webclient
         when(webClientconfig.webClientForEmployee()).thenReturn(webClient);
+        //mocking webclient.get()
         when(webClientconfig.webClientForEmployee().get()).thenReturn(requestHeadersUriSpecMock);
+        //mocking webclient.get().uri()
         when(requestHeadersUriSpecMock.uri(anyString())).thenReturn(requestHeadersSpecMock);
+        //mocking webclient.get().uri().retrieve()
         when(requestHeadersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        //mocking webclient.get().uri().retrieve().bodyToMono()
         when(responseSpecMock.bodyToMono(Employee[].class)).thenReturn(Mono.just(employeeArrayResponseMock()));
-
-        // convert employeeArrayResponseMock() to list
 
         ResponseEntity<List<EmployeeDesignation>> actual = employeeService.getEmployees();
         Assertions.assertEquals(HttpStatus.OK.is2xxSuccessful(), actual.getStatusCode().is2xxSuccessful());
@@ -60,11 +61,11 @@ class EmployeeServiceTest_Using_Webclient {
         //Employee[] = [  {}   ,  {},    {},     {},     {} ]
         //names          emp0    emp1   emp2    emp3    emp4
         Employee[] emp = new Employee[5];
-        emp[0] = new Employee("id1","name1",23,"software-engineer-1", 77000);
-        emp[1] = new Employee("id2","name2",45,"software-engineer-2", 97000);
-        emp[2] = new Employee("id3","name3",35,"software-engineer-3", 87000);
-        emp[3] = new Employee("id4","name4",19,"intern", 57000);
-        emp[4] = new Employee("id5","name5",27,"software-engineer-2", 67000);
+        emp[0] = new Employee("id1", "name1", 23, "software-engineer-1", 77000);
+        emp[1] = new Employee("id2", "name2", 45, "software-engineer-2", 97000);
+        emp[2] = new Employee("id3", "name3", 35, "software-engineer-3", 87000);
+        emp[3] = new Employee("id4", "name4", 19, "intern", 57000);
+        emp[4] = new Employee("id5", "name5", 27, "software-engineer-2", 67000);
         return emp;
 
     }
@@ -73,8 +74,5 @@ class EmployeeServiceTest_Using_Webclient {
     void getEmployeesShouldReturnSuccess200() {
 
     }
-
-    //hurdles: how to test if there is constructer initialization in a class?
-    //Approach2
 
 }
