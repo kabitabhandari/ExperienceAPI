@@ -57,11 +57,8 @@ public class EmployeeServiceTest_Using_MockWebServer {
                 new MockResponse()
                         .setHeader(
                                 "content-type",
-                                "application/json") // optional, until this service specifically
-                        // specifies response header is produced by it.
-                        // Check for it's controller, if it has produces
-                        // : application/json
-                        .setHeader("key", "value") // if more than one header
+                                "application/json") // optional, until this service specifically specifies response header is produced by it. Check for employeeWorld app's controller, if it has produces: application/json
+                        .setHeader("postman", "test") // if more than one header
                         .setBody(objectMapper.writeValueAsString(employeeArrayResponseMock())));
 
         // actual response
