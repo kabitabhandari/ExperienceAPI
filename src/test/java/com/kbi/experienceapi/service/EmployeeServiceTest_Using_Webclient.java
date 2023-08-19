@@ -17,6 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient.RequestHeaders
 import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -53,8 +54,11 @@ class EmployeeServiceTest_Using_Webclient {
         //mocking webclient.get().uri().retrieve().bodyToMono()
         when(responseSpecMock.bodyToMono(Employee[].class)).thenReturn(Mono.just(employeeArrayResponseMock()));
 
-        ResponseEntity<List<EmployeeDesignation>> actual = employeeService.getEmployees();
-        Assertions.assertEquals(HttpStatus.OK.is2xxSuccessful(), actual.getStatusCode().is2xxSuccessful());
+        Mono<Employee[]> allEmployeed = employeeService.getEmployees();
+        Employee[] actual_result = allEmployeed.block();
+        Assertions.assertEquals(employeeArrayResponseMock().length, actual_result.length);
+        Assertions.assertEquals(Arrays.stream(employeeArrayResponseMock()).toList().get(0).getName(),
+                Arrays.stream(actual_result).toList().get(0).getName() );
     }
 
     private Employee[] employeeArrayResponseMock() {

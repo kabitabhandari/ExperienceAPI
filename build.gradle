@@ -1,6 +1,12 @@
+buildscript {
+	ext {
+		springBootVersion = '3.1.2'
+	}
+}
+
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.2'
+	id 'org.springframework.boot' version "${springBootVersion}"
 	id 'io.spring.dependency-management' version '1.1.2'
 }
 
@@ -8,7 +14,7 @@ group = 'com.kbi'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+	sourceCompatibility = JavaVersion.VERSION_17
 }
 
 configurations {
@@ -24,20 +30,30 @@ repositories {
 
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	//To make use of block() while calling reactive webclient endpoints. But calling block() is not a good practice.
+	//Springboot Dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	// To make use of block() while calling reactive webclient endpoints. But calling block() is not a good practice.
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	//Swagger endpoints
+
+	// Swagger endpoints
 	implementation 'io.swagger.core.v3:swagger-annotations:2.2.10'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+
+	// Provides JUnit, Mockito, MockWebServer
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//testImplementation 'org.mockito:mockito-core'
+	testImplementation 'com.squareup.okhttp3:mockwebserver'
 	testImplementation 'io.projectreactor:reactor-test'
+
 }
 
 
