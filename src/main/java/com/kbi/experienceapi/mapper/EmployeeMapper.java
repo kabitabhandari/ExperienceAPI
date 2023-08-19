@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 public class EmployeeMapper {
 
     public ResponseEntity<List<EmployeeDesignation>> customizeEmployeeArray(Mono<Employee[]> employeeArray) {
-        List<EmployeeDesignation> ListOfEmployeeWithDesignation = Arrays.stream(employeeArray.block()).map(e -> onlyIncludeDesignation(e)).collect(Collectors.toList());
+        Employee[] empArray = employeeArray.block();
+        List<Employee> employees = Arrays.stream(empArray).toList();
+        List<EmployeeDesignation> ListOfEmployeeWithDesignation = employees.stream().map(e -> onlyIncludeDesignation(e)).collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK).body(ListOfEmployeeWithDesignation);
         //return new ResponseEntity<>(ListOfEmployeeWithDesignation, HttpStatus.CREATED); // or this way to return RE
