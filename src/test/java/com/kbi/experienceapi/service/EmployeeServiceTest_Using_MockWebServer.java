@@ -28,7 +28,6 @@ public class EmployeeServiceTest_Using_MockWebServer {
      * the intended HTTP interactions and dont have to face any challenge of mocking a complex Fluent Client, like
      * Reactive ones. Using Mock Web server is highly recommended to write the integration tests.
      */
-    @Autowired
     private WebClient webClient;
 
     @BeforeEach
