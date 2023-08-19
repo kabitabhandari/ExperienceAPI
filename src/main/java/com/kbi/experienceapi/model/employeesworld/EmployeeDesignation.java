@@ -12,5 +12,4 @@ public class EmployeeDesignation {
     private String employeeid;
     private String name;
     private String jobtitle;
-
 }

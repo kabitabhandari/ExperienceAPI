@@ -1,8 +1,12 @@
 package com.kbi.experienceapi.something2trytest;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import com.kbi.experienceapi.model.employeesworld.Employee;
 import com.kbi.experienceapi.model.employeesworld.EmployeeDesignation;
 import com.kbi.experienceapi.something2try.EmpServiceWithBuiLder;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,38 +19,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class EmpServiceWithBuiLderTest {
-    /**
-     * Assuming our class had constructor initialization. eg EmpServiceWithBuilder
-     */
+    /** Assuming our class had constructor initialization. eg EmpServiceWithBuilder */
+    @Mock WebClient webClientForEmployee;
 
-    @Mock
-    WebClient webClientForEmployee;
-    @Mock
-    WebClient.Builder builder;
-    @Mock
-    WebClient.RequestHeadersUriSpec requestHeadersUriSpecMock;
-    @Mock
-    WebClient.RequestHeadersSpec requestHeadersSpecMock;
-    @Mock
-    WebClient.ResponseSpec responseSpecMock;
+    @Mock WebClient.Builder builder;
+    @Mock WebClient.RequestHeadersUriSpec requestHeadersUriSpecMock;
+    @Mock WebClient.RequestHeadersSpec requestHeadersSpecMock;
+    @Mock WebClient.ResponseSpec responseSpecMock;
 
     EmpServiceWithBuiLder service;
 
-    //You need to create stubs for WebClient.Builder before invoking the EmpServiceWithBuiLder constructor
+    // You need to create stubs for WebClient.Builder before invoking the EmpServiceWithBuiLder
+    // constructor
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         when(builder.baseUrl(anyString())).thenReturn(builder);
         when(builder.build()).thenReturn(webClientForEmployee);
         service = new EmpServiceWithBuiLder(builder.baseUrl(anyString()));
-
     }
 
     @Test
@@ -54,15 +46,17 @@ class EmpServiceWithBuiLderTest {
         when(webClientForEmployee.get()).thenReturn(requestHeadersUriSpecMock);
         when(requestHeadersUriSpecMock.uri(anyString())).thenReturn(requestHeadersSpecMock);
         when(requestHeadersSpecMock.retrieve()).thenReturn(responseSpecMock);
-        when(responseSpecMock.bodyToMono(Employee[].class)).thenReturn(Mono.just(employeeArrayResponseMock()));
+        when(responseSpecMock.bodyToMono(Employee[].class))
+                .thenReturn(Mono.just(employeeArrayResponseMock()));
 
         ResponseEntity<List<EmployeeDesignation>> actual = service.getEmployees();
-        Assertions.assertEquals(HttpStatus.OK.is2xxSuccessful(), actual.getStatusCode().is2xxSuccessful());
+        Assertions.assertEquals(
+                HttpStatus.OK.is2xxSuccessful(), actual.getStatusCode().is2xxSuccessful());
     }
 
     private Employee[] employeeArrayResponseMock() {
-        //Employee[] = [  {}   ,  {},    {},     {},     {} ]
-        //names          emp0    emp1   emp2    emp3    emp4
+        // Employee[] = [  {}   ,  {},    {},     {},     {} ]
+        // names          emp0    emp1   emp2    emp3    emp4
         Employee[] emp = new Employee[5];
         emp[0] = new Employee("id1", "name1", 23, "software-engineer-1", 77000);
         emp[1] = new Employee("id2", "name2", 45, "software-engineer-2", 97000);
@@ -71,5 +65,4 @@ class EmpServiceWithBuiLderTest {
         emp[4] = new Employee("id5", "name5", 27, "software-engineer-2", 67000);
         return emp;
     }
-
 }

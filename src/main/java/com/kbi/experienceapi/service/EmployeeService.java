@@ -15,11 +15,6 @@ public class EmployeeService {
     }
 
     public Mono<Employee[]> getEmployees() {
-        return webClient
-                .get()
-                .uri("/all-employees")
-                .retrieve()
-                .bodyToMono(Employee[].class);
+        return webClient.get().uri("/all-employees").retrieve().bodyToMono(Employee[].class);
     }
-
 }
